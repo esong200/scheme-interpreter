@@ -129,13 +129,14 @@ def scheme_read(src):
     if src.current() is None:
         raise EOFError
     val = src.pop_first() # Get and remove the first token
+    print("DEBUG: popped ", val)
     if val == 'nil':
         # BEGIN PROBLEM 1
         return nil
         # END PROBLEM 1
     elif val == '(':
         # BEGIN PROBLEM 1
-        "*** YOUR CODE HERE ***"
+        return read_tail(src)
         # END PROBLEM 1
     elif val == "'":
         # BEGIN PROBLEM 6
@@ -158,11 +159,18 @@ def read_tail(src):
             raise SyntaxError('unexpected end of file')
         elif src.current() == ')':
             # BEGIN PROBLEM 1
-            
+            a = src.pop_first()
+            print("DEBUG: popped ", a)
+            return nil
             # END PROBLEM 1
         else:
             # BEGIN PROBLEM 1
-            "*** YOUR CODE HERE ***"
+            curr = scheme_read(src)
+            rest = read_tail(src)
+
+            #don't pop here, let scheme_read do the popping
+            
+            return Pair(curr, rest)
             # END PROBLEM 1
     except EOFError:
         raise SyntaxError('unexpected end of file')
