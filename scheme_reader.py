@@ -160,7 +160,7 @@ def read_tail(src):
         elif src.current() == ')':
             # BEGIN PROBLEM 1
             a = src.pop_first()
-            print("DEBUG: popped ", a)
+            #print("DEBUG: popped ", a)
             return nil
             # END PROBLEM 1
         else:
