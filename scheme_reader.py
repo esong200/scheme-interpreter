@@ -129,7 +129,6 @@ def scheme_read(src):
     if src.current() is None:
         raise EOFError
     val = src.pop_first() # Get and remove the first token
-    print("DEBUG: popped ", val)
     if val == 'nil':
         # BEGIN PROBLEM 1
         return nil
@@ -140,7 +139,7 @@ def scheme_read(src):
         # END PROBLEM 1
     elif val == "'":
         # BEGIN PROBLEM 6
-        "*** YOUR CODE HERE ***"
+        
         # END PROBLEM 6
     elif val not in DELIMITERS:
         return val

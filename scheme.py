@@ -35,9 +35,13 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     first, rest = expr.first, expr.rest
     if scheme_symbolp(first) and first in SPECIAL_FORMS:
         return SPECIAL_FORMS[first](rest, env)
-    else:
+    else: #handle call expressions
         # BEGIN PROBLEM 4
-        "*** YOUR CODE HERE ***"
+        #step 1, evaluate operator
+        curr_operator = scheme_eval(first, env)
+        f = lambda x: scheme_eval(x, env)
+        operands = rest.map(f)
+        return scheme_apply(curr_operator, operands, env)
         # END PROBLEM 4
 
 def self_evaluating(expr):
@@ -160,7 +164,12 @@ class BuiltinProcedure(Procedure):
         # Convert a Scheme list to a Python list
         python_args = []
         # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
+        curr = args
+        while curr is not nil:
+            python_args.append(curr.first)
+            curr = curr.rest
+        if self.use_env:
+            python_args.append(env)
         # END PROBLEM 3
         try:
             return self.fn(*python_args)
@@ -239,10 +248,14 @@ def do_define_form(expressions, env):
     """
     validate_form(expressions, 2) # Checks that expressions is a list of length at least 2
     target = expressions.first
+    print("DEBUG: ", expressions.rest.first)
+    print("DEBUG: ", target)
     if scheme_symbolp(target):
         validate_form(expressions, 2, 2) # Checks that expressions is a list of length exactly 2
         # BEGIN PROBLEM 5
-        "*** YOUR CODE HERE ***"
+        exp = scheme_eval(expressions.rest.first, env)
+        env.define(target, exp)
+        return target
         # END PROBLEM 5
     elif isinstance(target, Pair) and scheme_symbolp(target.first):
         # BEGIN PROBLEM 9
@@ -261,7 +274,7 @@ def do_quote_form(expressions, env):
     """
     validate_form(expressions, 1, 1)
     # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+    return expressions.first
     # END PROBLEM 6
 
 def do_begin_form(expressions, env):
@@ -684,6 +697,7 @@ def read_eval_print_loop(next_line, env, interactive=False, quiet=False,
             print('KeyboardInterrupt')
             if not interactive:
                 return
+            break
         except EOFError:  # <Control>-D, etc.
             print()
             return
