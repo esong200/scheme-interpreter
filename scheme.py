@@ -253,8 +253,7 @@ def do_define_form(expressions, env):
     """
     validate_form(expressions, 2) # Checks that expressions is a list of length at least 2
     target = expressions.first
-    print("DEBUG: ", expressions.rest.first)
-    print("DEBUG: ", target)
+    
     if scheme_symbolp(target):
         validate_form(expressions, 2, 2) # Checks that expressions is a list of length exactly 2
         # BEGIN PROBLEM 5
@@ -264,7 +263,17 @@ def do_define_form(expressions, env):
         # END PROBLEM 5
     elif isinstance(target, Pair) and scheme_symbolp(target.first):
         # BEGIN PROBLEM 9
-        "*** YOUR CODE HERE ***"
+
+        #construct a new expression, where expressions.first doesn't include the function name
+        new_expressions = Pair(expressions.first.rest, expressions.rest)
+        lambda_func = do_lambda_form(new_expressions, env)
+
+        #get the name of the function
+        func_name = target.first
+
+        #bind func_name to the newly created lambda function
+        env.define(func_name, lambda_func)
+        return func_name
         # END PROBLEM 9
     else:
         bad_target = target.first if isinstance(target, Pair) else target
@@ -305,7 +314,8 @@ def do_lambda_form(expressions, env):
     formals = expressions.first
     validate_formals(formals)
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    body = expressions.rest
+    return LambdaProcedure(formals, body, env)
     # END PROBLEM 8
 
 def do_if_form(expressions, env):
