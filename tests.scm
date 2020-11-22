@@ -2,7 +2,7 @@
 ;;;
 ;;; In order to run only a prefix of these examples, add the line
 ;;;
-;;; (exit)
+;;;
 ;;;
 ;;; after the last test you wish to run.
 
@@ -609,7 +609,7 @@ x
 ;;; Optional ;;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(exit)
+
 
 ; Tail call optimization tests
 
@@ -636,7 +636,7 @@ x
 (sum 1001 0)
 ; expect 501501
 
-(exit)
+
 
 ; macro tests
 

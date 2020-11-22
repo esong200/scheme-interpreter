@@ -435,11 +435,28 @@ def make_let_frame(bindings, env):
     if not scheme_listp(bindings):
         raise SchemeError('bad bindings list in let form')
     names, values = nil, nil
+
     # BEGIN PROBLEM 14
-    
+    bindings_iterator = bindings
+
+    while bindings_iterator is not nil:
+        #verify that each formal parameter has one value or expression associated with it
+        validate_form(bindings_iterator.first, min = 2, max = 2)
+
+        #verify that formals are strings
+        if type(bindings_iterator.first.first) is not str:
+            raise SchemeError("Formal parameter not string")
+
+        names = Pair(bindings_iterator.first.first, names)
+        values = Pair(scheme_eval(bindings_iterator.first.rest.first, env), values)
+
+        bindings_iterator = bindings_iterator.rest
+
+    #verify that each formal parameter name is unique
+    validate_formals(names)
+
     # END PROBLEM 14
     return env.make_child_frame(names, values)
-
 
 def do_define_macro(expressions, env):
     """Evaluate a define-macro form.

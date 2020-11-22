@@ -13,9 +13,17 @@
 ;; Returns a list of two-element lists
 (define (enumerate s)
   ; BEGIN PROBLEM 15
-  'replace-this-line
+  (enumerate-helper s 0)
+)
+(define (enumerate-helper s n)
+  (cond
+    ((eq? s nil) nil)
+    (else 
+      (cons (cons n (cons (car s) nil)) (enumerate-helper (cdr s) (+ n 1)))
+    )
   )
-  ; END PROBLEM 15
+)
+; END PROBLEM 15
 
 ;; Problem 16
 
@@ -23,9 +31,18 @@
 ;; the merged lists.
 (define (merge comp list1 list2)
   ; BEGIN PROBLEM 16
-  'replace-this-line
+
+  ;Assume lists are of equal length
+  (cond
+    ((eq? list1 nil) list2)
+    ((eq? list2 nil) list1)
+    ((comp (car list1) (car list2))
+      (cons (car list1) (cons (car list2) (merge comp (cdr list1) (cdr list2))))
+    )
+    (else (cons (car list2) (cons (car list1) (merge comp (cdr list1) (cdr list2)))))
   )
-  ; END PROBLEM 16
+)
+; END PROBLEM 16
 
 
 (merge < '(1 5 7 9) '(4 8 10))
